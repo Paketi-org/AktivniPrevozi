@@ -14,6 +14,7 @@ import json
 import os
 import socket
 from datetime import datetime
+import consul
 
 app = Flask(__name__)
 
@@ -30,11 +31,18 @@ def load_configurations():
 
 load_configurations()
 
+c = consul.Consul(host=app.config["CONSUL_IP"], port=app.config["CONSUL_PORT"])
+
 
 @app.route("/")
 def welcome():
     return "Welcome!", 200
-    
+
+@app.route("/aktivni_prevozi/konfiguracija")
+def konfiguracija():
+    _, data = c.kv.get('aktivni_prevozi/test')
+    return data['Value']
+
 custom_format = {
   'name': '%(name_of_service)s',
   'method': '%(crud_method)s',
@@ -85,6 +93,9 @@ def check_database_connection():
        print ("POLL: POLL_READ")
     if conn.poll() == extensions.POLL_WRITE:
        print ("POLL: POLL_WRITE")
+    _, data = c.kv.get('aktivni_prevozi/zdravje')
+    if data["Value"] == "NOT OK":
+        return False
     return True, "Database connection OK"
 
 def application_data():
@@ -418,5 +429,5 @@ app.add_url_rule("/healthcheck", "healthcheck", view_func=lambda: health.run())
 app.add_url_rule("/environment", "environment", view_func=lambda: envdump.run())
 api.add_resource(ListPrevozov, "/aktivni_prevozi")
 api.add_resource(Prevoz, "/aktivni_prevozi/<int:id>")
-app.run(host="0.0.0.0", port=5011, debug=True)
+app.run(host="0.0.0.0", port=5011)
 h.close()

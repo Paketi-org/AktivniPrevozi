@@ -9,5 +9,7 @@
     "VOZNIKI_IP": "http://172.25.1.4:5001/",
     "ISKALCI_IP": "http://172.25.1.12:5007/",
     "FLUENT_IP": "172.25.1.8",
-    "FLUENT_PORT": 9880
+    "FLUENT_PORT": 9880,
+    "CONSUL_IP": "172.25.1.25",
+    "CONSUL_PORT": 8500
 }

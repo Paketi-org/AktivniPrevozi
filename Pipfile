@@ -14,6 +14,7 @@ python-dotenv = "*"
 googlemaps = "*"
 fluent-logger = "*"
 flask-restx = "*"
+python-consul = "*"
 
 [dev-packages]
 
