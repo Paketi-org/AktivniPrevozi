@@ -593,12 +593,12 @@ class ListPrevozov(Resource):
 
         args = self.parser.parse_args()
 
-        # id = args["prevoznik"]
-        # # Preveri če prevoznik obstaja
-        # resp = requests.get(self.uporabniki + "/narocniki/%s" % str(id))
-        # if resp.status_code != 200:
-        #     l.warning("Uporabnik z ID %s ni bil najden" % str(id), extra={"name_of_service": "Aktivni prevozi", "crud_method": "post", "directions": "out", "ip_node": socket.gethostbyname(socket.gethostname()), "status": "fail", "http_code": 404})
-        #     abort(404)
+        id = args["prevoznik"]
+        # Preveri če prevoznik obstaja
+        resp = requests.get(self.uporabniki + "/narocniki/%s" % str(id))
+        if resp.status_code != 200:
+            l.warning("Uporabnik z ID %s ni bil najden" % str(id), extra={"name_of_service": "Aktivni prevozi", "crud_method": "post", "directions": "out", "ip_node": socket.gethostbyname(socket.gethostname()), "status": "fail", "http_code": 404})
+            abort(410, "Ta uporabnik ne obstaja!")
 
         values = []
         for a in args.values():
