@@ -593,7 +593,7 @@ class ListPrevozov(Resource):
 
         args = self.parser.parse_args()
 
-        id = args["prevoznik"]
+        id = args["uporabnik_prevoza"]
         # Preveri če prevoznik obstaja
         resp = requests.get(self.uporabniki + "/narocniki/%s" % str(id))
         if resp.status_code != 200:
