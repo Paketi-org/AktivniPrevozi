@@ -147,6 +147,24 @@ class Prevoz(Resource):
         self.iskani = app.config["ISKALCI_IP"]
         self.conn = connect_to_database()
         self.cur = self.conn.cursor()
+        self.cur.execute("select exists(select * from information_schema.tables where table_name=%s)", (self.table_name,))
+        if self.cur.fetchone()[0]:
+            print("Table {0} already exists".format(self.table_name))
+        else:
+            self.cur.execute('''CREATE TABLE aktivni_prevozi (
+                           id_prevoza INT NOT NULL,
+                           prevoznik INT NOT NULL,
+                           uporabnik_prevoza INT NOT NULL,
+                           od_lokacije CHAR(20),
+                           do_lokacije CHAR(20),
+                           cas_odhoda CHAR(20),
+                           cas_prihoda CHAR(20),
+                           trenutna_lokacija CHAR(20),
+                           odpremljeno CHAR(20),
+                           prejeto CHAR(20),
+                           status CHAR(20),
+                           strosek INT
+                        )''')
 
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("id_prevoza", type=int, help="Unikaten ID ponujenega prevoza")
