@@ -257,7 +257,7 @@ class Prevoz(Resource):
         Vrni podatke prevoza glede na ID
         """
         l.info(
-            "Zahtevaj prevoz z ID %s" % str(id),
+            "Zahtevaj akitvni prevoz z ID %s" % str(id),
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "get",
@@ -275,7 +275,7 @@ class Prevoz(Resource):
 
         if len(row) == 0:
             l.warning(
-                "Prevoz z ID %s ni bil najden in ne bo izbrisan" % str(id),
+                "Aktivni prevoz z ID %s ni bil najden" % str(id),
                 extra={
                     "name_of_service": "Aktivni prevozi",
                     "crud_method": "get",
@@ -307,7 +307,7 @@ class Prevoz(Resource):
         )
 
         l.info(
-            "Vrni prevoz z ID %s" % str(id),
+            "Vrni aktivni prevoz z ID %s" % str(id),
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "get",
@@ -329,7 +329,7 @@ class Prevoz(Resource):
         Posodobi podatke prevoza glede na ID
         """
         l.info(
-            "Posodobi prevoz z ID %s" % str(id),
+            "Posodobi akitvni prevoz z ID %s" % str(id),
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "put",
@@ -358,7 +358,7 @@ class Prevoz(Resource):
 
         if len(row) == 0:
             l.warning(
-                "Prevoz z ID %s ni bil najden" % str(id),
+                "Aktivni prevoz z ID %s ni bil najden" % str(id),
                 extra={
                     "name_of_service": "Aktivni prevozi",
                     "crud_method": "put",
@@ -410,7 +410,7 @@ class Prevoz(Resource):
         Izbriši prevoz glede na ID
         """
         l.info(
-            "Izbrisi prevoz z ID %s" % str(id),
+            "Izbrisi aktivni prevoz z ID %s" % str(id),
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "delete",
@@ -428,7 +428,7 @@ class Prevoz(Resource):
 
         if id not in ids:
             l.warning(
-                "Prevoz z ID %s ni bil najden in ne bo izbrisan" % str(id),
+                "Aktivni prevoz z ID %s ni bil najden in ne bo izbrisan" % str(id),
                 extra={
                     "name_of_service": "Aktivni prevozi",
                     "crud_method": "delete",
@@ -446,7 +446,7 @@ class Prevoz(Resource):
             self.conn.commit()
 
         l.info(
-            "Prevoz z ID %s izbrisan" % str(id),
+            "Aktivni prevoz z ID %s izbrisan" % str(id),
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "delete",
@@ -518,7 +518,7 @@ class ListPrevozov(Resource):
         Vrni vse prevoze
         """
         l.info(
-            "Zahtevaj vse prevoze",
+            "Zahtevaj vse aktivne prevoze",
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "get",
@@ -558,7 +558,7 @@ class ListPrevozov(Resource):
             prevozi.append(prevoz)
 
         l.info(
-            "Vrni vse prevoze",
+            "Vrni vse aktivne prevoze",
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "get",
@@ -579,7 +579,7 @@ class ListPrevozov(Resource):
         Dodaj nov prevoz
         """
         l.info(
-            "Dodaj nov prevoz",
+            "Dodaj nov aktivni prevoz",
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "post",
@@ -596,7 +596,7 @@ class ListPrevozov(Resource):
         # Preveri če prevoznik obstaja
         resp = requests.get(self.uporabniki + "/narocniki/%s" % str(id))
         if resp.status_code != 200:
-            l.warning("Uporabnik z ID %s ni bil najden" % str(id), extra={"name_of_service": "Aktivni prevozi", "crud_method": "post", "directions": "out", "ip_node": socket.gethostbyname(socket.gethostname()), "status": "fail", "http_code": 404})
+            l.warning("Uporabnik z ID %s ni bil najden" % str(id), extra={"name_of_service": "Aktivni prevozi", "crud_method": "post", "directions": "out", "ip_node": socket.gethostbyname(socket.gethostname()), "status": "fail", "http_code": 410})
             abort(410, "Ta uporabnik ne obstaja!")
 
         values = []
@@ -620,13 +620,13 @@ class ListPrevozov(Resource):
         elif args["vir"] == "ponujeni":
             vir = self.ponujeni + "ponujeni_prevozi/" + str(args["id_prevoza"])
         else:
-            l.warning('Zahteva mora biti ali "iskani" ali "ponujeni"')
+            l.warning('Zahteva za aktivni prevoz mora biti ali "iskani" ali "ponujeni"', extra={"name_of_service": "Aktivni prevozi", "crud_method": "post", "directions": "out", "ip_node": socket.gethostbyname(socket.gethostname()), "status": "fail", "http_code": 408})
             abort(408)
 
         resp = requests.get(vir)
         if resp.status_code != 200:
             l.warning(
-                "Prevoz z ID %s ni bil najden" % str(args["id_prevoza"]),
+                "Aktivni prevoz z ID %s ni bil najden" % str(args["id_prevoza"]),
                 extra={
                     "name_of_service": "Aktivni prevozi",
                     "crud_method": "post",
@@ -676,7 +676,7 @@ class ListPrevozov(Resource):
 
         # Ustvari transakcijo
         l.info(
-            "Nov prevoz dodan",
+            "Nov aktivni prevoz dodan",
             extra={
                 "name_of_service": "Aktivni prevozi",
                 "crud_method": "post",
