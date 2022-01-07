@@ -444,7 +444,6 @@ class Prevoz(Resource):
                 "DELETE FROM aktivni_prevozi WHERE id_prevoza = %s" % str(id)
             )
             self.conn.commit()
-            requests.delete(self.placila_storitev + "/placila/%s" % str(id))
 
         l.info(
             "Prevoz z ID %s izbrisan" % str(id),
